@@ -49,12 +49,15 @@ button {
 }
 
 .bookshelf {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.8rem;
-  padding: 0.8rem 1.2rem 1rem;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
   flex: 1;
   min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 .book-card {
@@ -66,7 +69,10 @@ button {
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.3);
   transition: transform 0.15s;
+  min-width: 70vw;
   min-height: 0;
+  flex-shrink: 0;
+  scroll-snap-align: center;
 }
 
 .book-card:active {
@@ -504,7 +510,8 @@ button {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
   .library-title { font-size: 1.8rem; }
-  .bookshelf { gap: 0.6rem; padding: 0.6rem; }
+  .bookshelf { gap: 0.8rem; padding: 0.8rem; }
+  .book-card { min-width: 75vw; }
   .book-cover-emoji { font-size: 3rem; }
   .book-card-title { font-size: 1.2rem; }
   .page-img { width: 50%; max-width: 200px; }
@@ -531,7 +538,8 @@ button {
 }
 
 @media (min-width: 768px) {
-  .bookshelf { max-width: 600px; margin: 0 auto; }
+  .bookshelf { max-width: none; justify-content: center; }
+  .book-card { min-width: 40vw; }
   .book-cover-emoji { font-size: 5rem; }
   .book-card-title { font-size: 2rem; }
   .page-img { width: 50%; max-width: 350px; }
