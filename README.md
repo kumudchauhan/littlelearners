@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# LittleLearners
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive ebooks for toddlers — built by a mom, for her baby.
 
-Currently, two official plugins are available:
+## Why I built this
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+My biggest motivation was to create content with **easy words and simple images** that my little one can actually speak and remember easily. I have so many books at home, and some of them have really long names like *hippopotamus*, *elephant*, *penguin* — words that are hard for a toddler to say or recall.
 
-## React Compiler
+I wanted to create something **relatable**, with short everyday words my baby already knows or is learning, paired with clear images and an option for **speech** so she can hear the words spoken aloud.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+I got tired of researching products that meet my expectations. Nothing quite matched my wishlist — so I decided to **create what I feel is best for my baby**.
 
-## Expanding the ESLint configuration
+The best part? I can keep the content **fully customizable** as she grows up. I can add more workbooks, new alphabets, harder words, and keep evolving the content to make learning fun — not a boring activity.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## What's inside
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **ABC Book** — Simple words (Apple, Ball, Car, Dog...) with big colorful letters and Twemoji illustrations
+- **Numbers Book** — Count from 1 to 10 with visual objects, big numbers, and words
+- **Shapes Book** — Learn shapes with SVG drawings showing colored sides & corners, plus real-world examples
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Each page has:
+- Large, crisp Twemoji SVG images
+- Big, colorful text
+- Tap-to-speak with a child-friendly voice
+- Swipe navigation
+- Summary pages (A-Z grid, 1-10 grid) where you can tap individual letters/numbers to hear them
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## What's next
+
+- Make these into a **compatible ebook format** that works on kids' tablets and Kindle (without speech support maybe, but still useful)
+- Add more books — fruits, animals, vehicles, and more are already drafted
+- Keep iterating as needs change and baby grows
+
+This is the first version. We ship, we learn, we improve.
+
+## Tech
+
+React + TypeScript + Vite. Twemoji SVGs (MIT licensed) for crisp images at any size. Web Speech API for text-to-speech.
+
+## Run locally
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+npm install
+npm run dev
 ```
