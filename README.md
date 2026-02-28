@@ -10,7 +10,7 @@ I wanted to create something **relatable**, with short everyday words my baby al
 
 I got tired of researching products that meet my expectations. Nothing quite matched my wishlist — so I decided to **create what I feel is best for my baby**.
 
-The best part? I can keep the content **fully customizable** as she grows up. I can add more workbooks, new alphabets, harder words, and keep evolving the content to make learning fun — not a boring activity.
+The best part? I can keep the content **fully customizable** as she grows up. I can add more workbooks, harder words, more realistic images, and keep evolving the content to make learning fun — not a boring activity.
 
 ## What's inside
 
