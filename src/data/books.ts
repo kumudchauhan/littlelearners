@@ -1,11 +1,13 @@
 export interface Page {
   emoji: string;
+  emojis?: string[];
   img?: string;
   title: string;
   subtitle?: string;
   bg: string;
   letterColor?: string;
   speech?: string;
+  audio?: string;
   type?: "summary";
   summaryItems?: string[];
 }
@@ -27,12 +29,12 @@ export const books: Book[] = [
     color: "#FF6B6B",
     pages: [
       { emoji: "🍎", title: "Aa", subtitle: "Apple", bg: "#FFE8E8", letterColor: "#E53935", speech: "A. ... for Apple" },
-      { emoji: "🏀", title: "Bb", subtitle: "Ball", bg: "#FFE8E0", letterColor: "#EF6C00", speech: "B. ... for Ball" },
+      { emoji: "🦋", title: "Bb", subtitle: "Butterfly", bg: "#F0E0FF", letterColor: "#7B1FA2", speech: "B. ... for Butterfly" },
       { emoji: "🚗", title: "Cc", subtitle: "Car", bg: "#FFE0E0", letterColor: "#E53935", speech: "C. ... for Car" },
-      { emoji: "🐶", title: "Dd", subtitle: "Dog", bg: "#E8F0FF", letterColor: "#8D6E63", speech: "D. ... for Dog" },
+      { emoji: "🦆", title: "Dd", subtitle: "Duck", bg: "#E0F8FF", letterColor: "#F9A825", speech: "D. ... for Duck" },
       { emoji: "🥚", title: "Ee", subtitle: "Egg", bg: "#FFFFF0", letterColor: "#F9A825", speech: "E. ... for Egg" },
       { emoji: "🐟", title: "Ff", subtitle: "Fish", bg: "#E0F0FF", letterColor: "#1976D2", speech: "F. ... for Fish" },
-      { emoji: "🐐", title: "Gg", subtitle: "Goat", bg: "#F0F0E8", letterColor: "#795548", speech: "G. ... for Goat" },
+      { emoji: "🦒", title: "Gg", subtitle: "Giraffe", bg: "#FFFFE0", letterColor: "#F9A825", speech: "G. ... for Giraffe" },
       { emoji: "👒", title: "Hh", subtitle: "Hat", bg: "#FFF0E0", letterColor: "#8D6E63", speech: "H. ... for Hat" },
       { emoji: "🍦", title: "Ii", subtitle: "Ice Cream", bg: "#F0F8FF", letterColor: "#E91E63", speech: "I. ... for Ice Cream" },
       { emoji: "🧃", title: "Jj", subtitle: "Juice", bg: "#FFFFE0", letterColor: "#F9A825", speech: "J. ... for Juice" },
@@ -46,14 +48,14 @@ export const books: Book[] = [
       { emoji: "🐇", title: "Rr", subtitle: "Rabbit", bg: "#F0FFE0", letterColor: "#8D6E63", speech: "R. ... for Rabbit" },
       { emoji: "☀️", title: "Ss", subtitle: "Sun", bg: "#FFFFF0", letterColor: "#F9A825", speech: "S. ... for Sun" },
       { emoji: "🐢", title: "Tt", subtitle: "Turtle", bg: "#E0FFF0", letterColor: "#2E7D32", speech: "T. ... for Turtle" },
-      { emoji: "☂️", title: "Uu", subtitle: "Umbrella", bg: "#E8E8FF", letterColor: "#5C6BC0", speech: "U. ... for Umbrella" },
+      { emoji: "🦄", title: "Uu", subtitle: "Unicorn", bg: "#FFE0FF", letterColor: "#9C27B0", speech: "U. ... for Unicorn" },
       { emoji: "🚐", title: "Vv", subtitle: "Van", bg: "#E8F0FF", letterColor: "#1565C0", speech: "V. ... for Van" },
-      { emoji: "🧶", title: "Ww", subtitle: "Wool", bg: "#FFE0E8", letterColor: "#E53935", speech: "W. ... for Wool" },
+      { emoji: "⌚", title: "Ww", subtitle: "Watch", bg: "#F0F0F0", letterColor: "#37474F", speech: "W. ... for Watch" },
       { emoji: "🎄", title: "Xx", subtitle: "Xmas Tree", bg: "#E0FFE0", letterColor: "#2E7D32", speech: "X. ... for Xmas Tree" },
       { emoji: "⛵", title: "Yy", subtitle: "Yacht", bg: "#E0F0FF", letterColor: "#0288D1", speech: "Y. ... for Yacht" },
       { emoji: "🦓", title: "Zz", subtitle: "Zebra", bg: "#F0F0F0", letterColor: "#37474F", speech: "Z. ... for Zebra" },
-      { emoji: "🔤", title: "A B C", subtitle: "Uppercase", bg: "#FFF0E8", type: "summary", summaryItems: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), speech: "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z" },
-      { emoji: "🔤", title: "a b c", subtitle: "Lowercase", bg: "#E8F0FF", type: "summary", summaryItems: "abcdefghijklmnopqrstuvwxyz".split(""), speech: "a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z" },
+      { emoji: "🔤", title: "A B C", subtitle: "Uppercase", bg: "#FFF0E8", type: "summary", summaryItems: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), audio: "/abc-song.mp3", speech: "A B C D E F G, H I J K L M N O P, Q R S T U V, W X Y and Z. Now I know my A B Cs, next time won't you sing with me!" },
+      { emoji: "🔤", title: "a b c", subtitle: "Lowercase", bg: "#E8F0FF", type: "summary", summaryItems: "abcdefghijklmnopqrstuvwxyz".split(""), audio: "/abc-song.mp3", speech: "a b c d e f g, h i j k l m n o p, q r s t u v, w x y and z. Now I know my a b cs, next time won't you sing with me!" },
     ],
   },
   {
@@ -62,17 +64,17 @@ export const books: Book[] = [
     cover: "🔢",
     color: "#4ECDC4",
     pages: [
-      { emoji: "☀️", title: "1", subtitle: "One", bg: "#FFF5E0", letterColor: "#F9A825", speech: "One. One sun!" },
-      { emoji: "🍎", title: "2", subtitle: "Two", bg: "#E0F5FF", letterColor: "#E53935", speech: "Two. One, two apples!" },
-      { emoji: "🌷", title: "3", subtitle: "Three", bg: "#FFE0F0", letterColor: "#E91E63", speech: "Three. One, two, three flowers!" },
-      { emoji: "🦋", title: "4", subtitle: "Four", bg: "#E0FFE0", letterColor: "#7B1FA2", speech: "Four. One, two, three, four butterflies!" },
-      { emoji: "⭐", title: "5", subtitle: "Five", bg: "#F0E0FF", letterColor: "#F9A825", speech: "Five. One, two, three, four, five stars!" },
-      { emoji: "🐥", title: "6", subtitle: "Six", bg: "#FFE8E0", letterColor: "#F9A825", speech: "Six. One, two, three, four, five, six chicks!" },
-      { emoji: "🌈", title: "7", subtitle: "Seven", bg: "#E0FFF5", letterColor: "#E91E63", speech: "Seven. One, two, three, four, five, six, seven rainbows!" },
-      { emoji: "🎈", title: "8", subtitle: "Eight", bg: "#F5E0FF", letterColor: "#E53935", speech: "Eight. One, two, three, four, five, six, seven, eight balloons!" },
-      { emoji: "🌻", title: "9", subtitle: "Nine", bg: "#FFFFE0", letterColor: "#F9A825", speech: "Nine. One, two, three, four, five, six, seven, eight, nine sunflowers!" },
-      { emoji: "🍓", title: "10", subtitle: "Ten", bg: "#E8FFE8", letterColor: "#E53935", speech: "Ten. One, two, three, four, five, six, seven, eight, nine, ten strawberries!" },
-      { emoji: "🔢", title: "1 2 3", subtitle: "All Numbers", bg: "#E0FFF5", type: "summary", summaryItems: ["1","2","3","4","5","6","7","8","9","10"], speech: "1, 2, 3, 4, 5, 6, 7, 8, 9, 10" },
+      { emoji: "🚂", title: "1", subtitle: "One", bg: "#FFE0E0", letterColor: "#D32F2F", speech: "One. ... One train!" },
+      { emoji: "🐥", emojis: ["🐥", "🐥"], title: "2", subtitle: "Two", bg: "#FFFDE0", letterColor: "#F9A825", speech: "Two. ... Two chicks! ... One, two." },
+      { emoji: "🍎", emojis: ["🍎", "🍏", "🍎"], title: "3", subtitle: "Three", bg: "#FFE8E8", letterColor: "#E53935", speech: "Three. ... Three apples! ... One, two, three." },
+      { emoji: "🌸", emojis: ["🌻", "🌷", "🌹", "🌸"], title: "4", subtitle: "Four", bg: "#FFE0F0", letterColor: "#E91E63", speech: "Four. ... Four flowers! ... One, two, three, four." },
+      { emoji: "⭐", title: "5", subtitle: "Five", bg: "#FFFDE0", letterColor: "#F9A825", speech: "Five. ... Five stars! ... One, two, three, four, five." },
+      { emoji: "⛵", emojis: ["⛵", "🚤", "🛶", "⛵", "🚤", "🛶"], title: "6", subtitle: "Six", bg: "#E0F0FF", letterColor: "#0288D1", speech: "Six. ... Six boats! ... One, two, three, four, five, six." },
+      { emoji: "🌈", title: "7", subtitle: "Seven", bg: "#E0FFF5", letterColor: "#E91E63", speech: "Seven. ... Seven rainbows! ... One, two, three, four, five, six, seven." },
+      { emoji: "🎈", emojis: ["🎈", "🎈", "🎈", "🎈", "🎈", "🎈", "🎈", "🎈"], title: "8", subtitle: "Eight", bg: "#FFE0E0", letterColor: "#E53935", speech: "Eight. ... Eight balloons! ... One, two, three, four, five, six, seven, eight." },
+      { emoji: "☕", emojis: ["☕", "🍵", "🥛", "☕", "🍵", "🥛", "☕", "🍵", "🥛"], title: "9", subtitle: "Nine", bg: "#F0E8D0", letterColor: "#795548", speech: "Nine. ... Nine cups! ... One, two, three, four, five, six, seven, eight, nine." },
+      { emoji: "🍎", emojis: ["🍎", "🍌", "🍊", "🍇", "🍓", "🍉", "🥭", "🍑", "🍍", "🍒"], title: "10", subtitle: "Ten", bg: "#E0FFE0", letterColor: "#2E7D32", speech: "Ten. ... Ten fruits! ... One, two, three, four, five, six, seven, eight, nine, ten." },
+      { emoji: "🔢", title: "1 2 3", subtitle: "All Numbers", bg: "#FFF5E8", type: "summary", summaryItems: ["1","2","3","4","5","6","7","8","9","10"], speech: "1, 2, 3, 4, 5, 6, 7, 8, 9, 10" },
     ],
   },
   {
@@ -206,6 +208,7 @@ export const books: Book[] = [
     title: "Shapes",
     cover: "🔵",
     color: "#EC407A",
+    hidden: true,
     pages: [
       { emoji: "🍊", title: "Circle", subtitle: "No corners, no sides — round and round!", bg: "#FFE0E0", letterColor: "#E53935", speech: "Circle! No corners, no sides. Round and round! Like an orange or a ball." },
       { emoji: "🥚", title: "Oval", subtitle: "A stretched circle — like an egg!", bg: "#FFF5E0", letterColor: "#EF6C00", speech: "Oval! A stretched circle, like an egg!" },

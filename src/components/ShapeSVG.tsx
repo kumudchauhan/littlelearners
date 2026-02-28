@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 const SIDE_COLORS = ["#E53935", "#1565C0", "#2E7D32", "#F9A825", "#7B1FA2", "#EF6C00"];
 const CORNER_R = 5;
 
@@ -20,7 +22,7 @@ function corners(pts: [number, number][]) {
   return pts.map(([x, y], i) => ({ x, y, color: SIDE_COLORS[i % SIDE_COLORS.length] }));
 }
 
-const shapes: Record<string, () => JSX.Element> = {
+const shapes: Record<string, () => ReactElement> = {
   Circle: () => (
     <svg viewBox="0 0 120 120" className="shape-svg">
       <circle cx={60} cy={60} r={48} fill="none" stroke="#E53935" strokeWidth={5} />
