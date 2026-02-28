@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFECD2"/>
+      <stop offset="100%" style="stop-color:#FCB69F"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <text x="256" y="200" text-anchor="middle" font-size="120">📚</text>
+  <text x="256" y="340" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#5D4037" font-weight="bold">Little</text>
+  <text x="256" y="420" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#FF6B6B" font-weight="bold">Readers</text>
+</svg>
