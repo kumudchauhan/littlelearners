@@ -14,9 +14,9 @@ The best part is that I can keep the content **fully customizable** as she grows
 
 ## What's inside
 
-- **ABC Book** — Simple words (Apple, Ball, Car, Dog...) with big colorful letters and Twemoji illustrations
-- **Numbers Book** — Count from 1 to 10 with visual objects, big numbers, and words
-- **Shapes Book** — Learn shapes with SVG drawings showing colored sides & corners, plus real-world examples
+- **Alphabets Book** — Simple words (Apple, Ball, Car, Dog...) with big colorful letters and Twemoji illustrations, and voice enabled fetaure.
+- **Numbers Book** — Count from 1 to 10 with visual objects, big numbers, and words, with visual effect and sound during counting.
+- **Coming soon...** — Many more in the series as we learn, and grow and, our intersts develop.
 
 Each page has:
 - Large, crisp Twemoji SVG images
