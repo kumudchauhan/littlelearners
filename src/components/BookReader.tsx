@@ -91,8 +91,7 @@ const ABC_COLORS = [
 export default function BookReader({ book, onBack }: Props) {
   const [page, setPage] = useState(0);
   const [speaking, setSpeaking] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [showVolume, setShowVolume] = useState(false);
+  const [volume] = useState(1);
   const [showPagePicker, setShowPagePicker] = useState(false);
   const current = book.pages[page];
   const touchStart = useRef<{ x: number; y: number; pointerId: number; time: number } | null>(null);
@@ -356,18 +355,6 @@ export default function BookReader({ book, onBack }: Props) {
           </>
         )}
         <div className="speak-controls" onPointerDown={stopEvent} onPointerUp={stopEvent}>
-          {showVolume && (
-            <input
-              type="range"
-              className="volume-slider"
-              min={0}
-              max={1}
-              step={0.1}
-              value={volume}
-              onChange={(e) => setVolume(parseFloat(e.target.value))}
-              onClick={stopEvent}
-            />
-          )}
           <button
             className="speak-btn"
             onPointerUp={(e) => { e.stopPropagation(); handleSpeak(); }}
