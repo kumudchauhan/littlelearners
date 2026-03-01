@@ -4,7 +4,7 @@ Interactive ebooks: Designed by a mom, for her baby!
 
 ## Why I built this
 
-My biggest motivation was to create content with for my 15 month daugher, who is learning to know the world, buidling vocab, trying to remember so many words. So I wanted some content that has **easy words and simple images** that my little one can actually speak and remember easily. I purchased so many books, and some of them have really long names like *hippopotamus*, *elephant*, *penguin* — words that are hard for a toddler to say or recall.
+My biggest motivation was to create content for my 15 month daugher, who is learning to know the world, buidling vocab, trying to remember so many words. So I wanted some content that has **easy words and simple images** that my little one can actually speak and remember easily. I purchased so many books, and some of them have really long names like *hippopotamus*, *elephant*, *penguin* — words that are hard for a toddler to say or recall.
 
 I wanted to create something **relatable**, with short everyday words my baby already knows or is learning, paired with clear images and an option for **speech** so she can hear the words spoken aloud.
 
