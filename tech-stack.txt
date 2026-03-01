@@ -1,0 +1,121 @@
+LittleReaders - Tech Stack & Rationale
+=======================================
+
+FRAMEWORK: React 19 + TypeScript
+---------------------------------
+Why React:
+- Component model maps naturally to the app structure (Library, BookReader, ShapeSVG)
+- Declarative UI makes page rendering logic readable -- each book type (ABC, Numbers,
+  Shapes, Picture books) is a clear conditional branch in JSX
+- React 19 is the latest stable release with improved performance
+- Massive ecosystem and community support for long-term maintenance
+
+Why TypeScript:
+- Type-safe interfaces for Book and Page data structures prevent bugs when adding
+  new books or page types (e.g., ensuring every page has required fields like bg,
+  title, emoji)
+- Catches mistakes at build time rather than at runtime on a toddler's device
+- Self-documenting code -- the Page interface serves as a schema for book content
+
+
+BUILD TOOL: Vite 7
+------------------
+Why Vite:
+- Sub-second hot module replacement during development -- instant feedback when
+  tweaking colors, layouts, or speech parameters
+- Near-instant cold starts (170ms) vs webpack's multi-second startup
+- Zero-config for React + TypeScript out of the box
+- Produces optimized production bundles with code splitting
+- Built-in dev server with --host flag for easy LAN testing on phones/tablets
+
+
+STYLING: Plain CSS (no framework)
+----------------------------------
+Why no Tailwind/CSS-in-JS:
+- The app has ~560 lines of CSS total -- a utility framework adds complexity
+  without proportional benefit at this scale
+- Single App.css file is easy to scan and modify
+- No build-time CSS processing overhead
+- No class name conflicts since component names are unique (reader-nav, speak-btn, etc.)
+- CSS animations (popIn, slideUp, countBounce) are cleaner in plain CSS than
+  in JS-based solutions
+
+
+SPEECH: Web Speech API (browser-native)
+----------------------------------------
+Why Web Speech API:
+- Zero dependencies -- no external TTS service, no API keys, no network latency
+- Works offline once the page loads (important for toddler use on planes, cars, etc.)
+- Free -- no per-request costs from cloud TTS services
+- Platform-native voices sound natural (Samantha on iOS/macOS is high quality)
+- Configurable pitch (1.7 for baby voice), rate, and volume through simple parameters
+- Fallback chain: audio files (.mp3) -> Web Speech API, so specific content
+  (like the ABC song) can use pre-recorded audio
+
+Why not a cloud TTS (Google, AWS Polly, ElevenLabs):
+- Adds network dependency and latency for every utterance
+- Costs money at scale
+- Overkill for single words/short phrases like "A. Apple." or "3. Three."
+- Privacy concern -- no need to send a child's interactions to external servers
+
+
+TOUCH HANDLING: Pointer Events API
+------------------------------------
+Why Pointer Events (not Touch Events):
+- Unified API that handles touch, mouse, and pen input
+- pointerId property enables tracking individual fingers -- critical for the
+  multi-touch fix where a baby uses both hands
+- Better browser support trajectory (W3C standard)
+- Works identically on desktop (mouse) and mobile (touch) for development
+
+
+IMAGES: Twemoji CDN (Twitter emoji as SVG)
+--------------------------------------------
+Why Twemoji:
+- Consistent emoji rendering across all devices and OS versions
+- SVG format scales perfectly at any size without pixelation
+- CDN-hosted -- no need to bundle hundreds of emoji images
+- Cross-platform identical appearance -- a cow emoji looks the same on
+  iPhone, Android, and desktop
+
+
+STATE MANAGEMENT: React hooks (useState, useRef, useCallback)
+--------------------------------------------------------------
+Why no Redux/Zustand/Context:
+- The app has minimal state: current page number, speaking status, volume,
+  speech enabled toggle
+- All state is local to BookReader or App -- no cross-component state sharing needed
+- localStorage for persistence (speech enabled setting) is simpler than a
+  state management library for a single boolean
+- Adding a state library would be over-engineering for this use case
+
+
+DEPLOYMENT: GitHub Pages + GitHub Actions
+------------------------------------------
+Why GitHub Pages:
+- Free static hosting
+- Automatic deploys via GitHub Actions on push to master
+- Custom base path (/littlelearners/) configured in Vite
+- HTTPS included -- required for Web Speech API on mobile browsers
+- No server infrastructure to maintain
+
+
+DEPENDENCIES: Minimal (React + ReactDOM only)
+-----------------------------------------------
+Total production dependencies: 2 (react, react-dom)
+Total dev dependencies: 9 (vite, typescript, eslint, type definitions)
+
+Why so few:
+- Every dependency is a maintenance burden and potential security vector
+- A children's app should be fast to load -- smaller bundle = faster startup
+- The Web Speech API, Pointer Events, and Audio API are all browser-native
+- Plain CSS eliminates the need for styling libraries
+- No routing library needed -- just a useState toggle between Library and BookReader
+
+
+SUMMARY
+-------
+The stack is intentionally minimal: React for UI, TypeScript for safety, Vite for
+speed, plain CSS for styling, and browser-native APIs for speech/touch/audio. This
+keeps the app fast, offline-capable, free to host, and easy to maintain. There are
+zero runtime dependencies beyond React itself.

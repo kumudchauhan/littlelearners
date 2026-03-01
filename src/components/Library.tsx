@@ -8,7 +8,7 @@ export default function Library({ onSelect }: Props) {
   return (
     <div className="library">
       <header className="library-header">
-        <h1 className="library-title">📚 LittleReaders</h1>
+        <h1 className="library-title">📚 AnayaBloom</h1>
         <p className="library-sub">Tap a book to start reading!</p>
       </header>
       <div className="bookshelf">
@@ -17,12 +17,16 @@ export default function Library({ onSelect }: Props) {
             key={book.id}
             className="book-card"
             style={{ background: book.color }}
-            onPointerDown={() => onSelect(book.id)}
+            onPointerUp={() => onSelect(book.id)}
           >
             <span className="book-cover-emoji">{book.cover}</span>
             <span className="book-card-title">{book.title}</span>
           </button>
         ))}
+        <div className="book-card coming-soon-card">
+          <span className="book-cover-emoji">📚</span>
+          <span className="book-card-title">Coming Soon...</span>
+        </div>
       </div>
     </div>
   );

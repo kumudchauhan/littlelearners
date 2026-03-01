@@ -7,6 +7,6 @@
   </defs>
   <rect width="512" height="512" rx="80" fill="url(#bg)"/>
   <text x="256" y="200" text-anchor="middle" font-size="120">📚</text>
-  <text x="256" y="340" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#5D4037" font-weight="bold">Little</text>
-  <text x="256" y="420" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#FF6B6B" font-weight="bold">Readers</text>
+  <text x="256" y="340" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#5D4037" font-weight="bold">Anaya</text>
+  <text x="256" y="420" text-anchor="middle" font-family="Comic Sans MS, cursive" font-size="48" fill="#FF6B6B" font-weight="bold">Bloom</text>
 </svg>

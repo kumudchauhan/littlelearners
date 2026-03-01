@@ -18,8 +18,10 @@ let childVoice: SpeechSynthesisVoice | null = null;
 
 function loadVoice() {
   const voices = window.speechSynthesis?.getVoices() || [];
-  childVoice = voices.find((v) => /samantha|karen|moira|tessa/i.test(v.name) && /en/i.test(v.lang))
-    || voices.find((v) => /female|girl|child/i.test(v.name) && /en/i.test(v.lang))
+  childVoice = voices.find((v) => /samantha/i.test(v.name) && /en/i.test(v.lang))
+    || voices.find((v) => /karen|moira|tessa/i.test(v.name) && /en/i.test(v.lang))
+    || voices.find((v) => /child|kid|girl/i.test(v.name) && /en/i.test(v.lang))
+    || voices.find((v) => /female/i.test(v.name) && /en/i.test(v.lang))
     || voices.find((v) => /en-US|en-GB|en-AU/i.test(v.lang))
     || null;
 }
@@ -31,20 +33,46 @@ if (typeof window !== "undefined" && "speechSynthesis" in window) {
 
 let speechVolume = 1;
 
-function speak(text: string, rate = 0.65) {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
+function speak(text: string, rate = 0.55) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+
+  const parts = text.split("...").map((s) => s.trim()).filter(Boolean);
+  if (parts.length <= 1) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.rate = rate;
-    utter.pitch = 1.2;
+    utter.pitch = 1.3;
     utter.volume = speechVolume;
     utter.lang = "en-US";
     if (childVoice) utter.voice = childVoice;
     window.speechSynthesis.speak(utter);
+    return;
   }
+
+  let i = 0;
+  function speakNext() {
+    if (i >= parts.length) return;
+    const utter = new SpeechSynthesisUtterance(parts[i]);
+    utter.rate = rate;
+    utter.pitch = 1.3;
+    utter.volume = speechVolume;
+    utter.lang = "en-US";
+    if (childVoice) utter.voice = childVoice;
+    utter.onend = () => {
+      i++;
+      if (i < parts.length) {
+        setTimeout(speakNext, 300);
+      }
+    };
+    window.speechSynthesis.speak(utter);
+  }
+  speakNext();
 }
 
 const stopEvent = (e: React.PointerEvent | React.MouseEvent) => { e.stopPropagation(); };
+
+const SWIPE_THRESHOLD_PX = 20;
+const SWIPE_RATIO = 0.6;
 
 const NUMBER_COLORS = [
   "#E53935", "#F9A825", "#2E7D32", "#1565C0", "#7B1FA2",
@@ -65,8 +93,9 @@ export default function BookReader({ book, onBack }: Props) {
   const [speaking, setSpeaking] = useState(false);
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
+  const [showPagePicker, setShowPagePicker] = useState(false);
   const current = book.pages[page];
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const touchStart = useRef<{ x: number; y: number; pointerId: number; time: number } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioFailed = useRef(false);
 
@@ -101,22 +130,42 @@ export default function BookReader({ book, onBack }: Props) {
   );
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    touchStart.current = { x: e.clientX, y: e.clientY };
+    // Always accept a new pointer -- baby may be holding phone with other fingers
+    touchStart.current = { x: e.clientX, y: e.clientY, pointerId: e.pointerId, time: Date.now() };
   }, []);
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
-      if (!touchStart.current) return;
+      if (!touchStart.current || e.pointerId !== touchStart.current.pointerId) return;
       const dx = e.clientX - touchStart.current.x;
       const dy = e.clientY - touchStart.current.y;
+      const elapsed = Date.now() - touchStart.current.time;
       touchStart.current = null;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+
+      if (Math.abs(dx) > SWIPE_THRESHOLD_PX && Math.abs(dx) > Math.abs(dy) * SWIPE_RATIO) {
         if (dx < 0) next();
         else prev();
+        return;
+      }
+
+      if (elapsed < 300 && Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+        const screenWidth = window.innerWidth;
+        const tapX = e.clientX;
+        if (tapX < screenWidth * 0.15) {
+          prev();
+        } else if (tapX > screenWidth * 0.85) {
+          next();
+        }
       }
     },
     [next, prev]
   );
+
+  const handlePointerCancel = useCallback((e: React.PointerEvent) => {
+    if (touchStart.current && e.pointerId === touchStart.current.pointerId) {
+      touchStart.current = null;
+    }
+  }, []);
 
   const handleSpeak = useCallback(() => {
     if (audioRef.current) {
@@ -143,7 +192,7 @@ export default function BookReader({ book, onBack }: Props) {
         audioRef.current = null;
         audioFailed.current = true;
         const text = current.speech || `${current.title}. ${current.subtitle || ""}`;
-        speak(text, current.type === "summary" ? 0.45 : 0.65);
+        speak(text, current.type === "summary" ? 0.4 : 0.55);
       };
       audio.load();
       return;
@@ -162,7 +211,7 @@ export default function BookReader({ book, onBack }: Props) {
     }
 
     const text = current.speech || `${current.title}. ${current.subtitle || ""}`;
-    speak(text, current.type === "summary" ? 0.45 : 0.65);
+    speak(text, current.type === "summary" ? 0.4 : 0.55);
   }, [current, volume]);
 
   const isNumbers = book.id === "numbers";
@@ -199,7 +248,7 @@ export default function BookReader({ book, onBack }: Props) {
     }, preDelay + count * 1200 + 600));
   }, [current]);
 
-  const tapSpeak = useCallback((e: React.MouseEvent) => {
+  const tapSpeak = useCallback((e: React.PointerEvent) => {
     e.stopPropagation();
     if (isNumbers && current.type !== "summary") {
       const count = parseInt(current.title) || 1;
@@ -217,16 +266,15 @@ export default function BookReader({ book, onBack }: Props) {
       className="reader"
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
     >
-      <div className="reader-header">
-        <button className="back-btn" onPointerDown={onBack}>
-          ← Back
+      <div className="reader-header" onPointerDown={stopEvent}>
+        <button className="back-btn" onPointerUp={(e) => { e.stopPropagation(); onBack(); }}>
+          &#8592; Back
         </button>
-        <span className="page-counter">
-          {page + 1} / {book.pages.length}
-        </span>
         {book.pages.some((p) => p.type === "summary") && (
-          <button className="back-btn" onPointerDown={() => {
+          <button className="back-btn" onPointerUp={(e) => {
+            e.stopPropagation();
             const idx = book.pages.findIndex((p) => p.type === "summary");
             if (idx >= 0) setPage(idx);
           }}>
@@ -240,20 +288,20 @@ export default function BookReader({ book, onBack }: Props) {
           <div className="summary-layout">
             <div className={`summary-grid ${isNumbers ? "summary-grid-numbers" : ""} ${isAbc ? "summary-grid-abc" : ""}`}>
               {current.summaryItems?.map((item, i) => (
-                <span key={i} className={`summary-item ${isNumbers ? "summary-item-number" : ""} ${isAbc ? "summary-item-abc" : ""}`} style={isNumbers ? { color: NUMBER_COLORS[i % NUMBER_COLORS.length] } : isAbc ? { color: ABC_COLORS[i % ABC_COLORS.length] } : undefined} onClick={() => speak(/^[a-zA-Z]$/.test(item) ? `${item.toUpperCase()}. ` : item)} onPointerDown={stopEvent} onPointerUp={stopEvent}>{item}</span>
+                <span key={i} className={`summary-item ${isNumbers ? "summary-item-number" : ""} ${isAbc ? "summary-item-abc" : ""}`} style={isNumbers ? { color: NUMBER_COLORS[i % NUMBER_COLORS.length] } : isAbc ? { color: ABC_COLORS[i % ABC_COLORS.length] } : undefined} onPointerDown={stopEvent} onPointerUp={(e) => { e.stopPropagation(); speak(/^[a-zA-Z]$/.test(item) ? `${item.toUpperCase()}. ` : item); }}>{item}</span>
               ))}
             </div>
           </div>
         ) : isShapes ? (
           <div className="shape-layout">
-            <div className="shape-row" onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}>
+            <div className="shape-row" onPointerDown={stopEvent} onPointerUp={tapSpeak}>
               <ShapeSVG name={current.title} />
               <img className="shape-example" src={emojiToTwemoji(current.emoji)} alt={current.title} />
             </div>
             <div
               className="page-title tappable"
               style={current.letterColor ? { color: current.letterColor } : undefined}
-              onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}
+              onPointerDown={stopEvent} onPointerUp={tapSpeak}
             >
               {current.title}
             </div>
@@ -263,7 +311,7 @@ export default function BookReader({ book, onBack }: Props) {
           </div>
         ) : isNumbers ? (
           <div className="number-layout">
-            <div className="number-objects" onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}>
+            <div className="number-objects" onPointerDown={stopEvent} onPointerUp={tapSpeak}>
               {current.emojis ? current.emojis.map((em, i) => (
                 <img key={i} className={`number-object number-obj-count-${Math.min(current.emojis!.length, 10)} ${highlightIdx === i ? "number-object-highlight" : ""}`} src={emojiToTwemoji(em)} alt="" />
               )) : Array.from({ length: parseInt(current.title) || 1 }, (_, i) => (
@@ -273,7 +321,7 @@ export default function BookReader({ book, onBack }: Props) {
             <div
               className="number-digit tappable"
               style={current.letterColor ? { color: current.letterColor } : undefined}
-              onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}
+              onPointerDown={stopEvent} onPointerUp={tapSpeak}
             >
               {current.title}
             </div>
@@ -281,13 +329,13 @@ export default function BookReader({ book, onBack }: Props) {
           </div>
         ) : (
           <>
-            <img className={`page-img tappable ${isAbc ? "page-img-abc" : ""}`} src={current.img || emojiToTwemoji(current.emoji)} alt={current.subtitle || current.title} onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent} />
+            <img className={`page-img tappable ${isAbc ? "page-img-abc" : ""}`} src={current.img || emojiToTwemoji(current.emoji)} alt={current.subtitle || current.title} onPointerDown={stopEvent} onPointerUp={tapSpeak} />
             <div className="page-text">
               {isAbc ? (
                 <div
                   className="page-title abc-title tappable"
                   style={current.letterColor ? { color: current.letterColor } : undefined}
-                  onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}
+                  onPointerDown={stopEvent} onPointerUp={tapSpeak}
                 >
                   <span>{current.title[0]}</span>
                   <span className="abc-lower">{current.title[1]}</span>
@@ -296,7 +344,7 @@ export default function BookReader({ book, onBack }: Props) {
                 <div
                   className="page-title tappable"
                   style={current.letterColor ? { color: current.letterColor } : undefined}
-                  onClick={tapSpeak} onPointerDown={stopEvent} onPointerUp={stopEvent}
+                  onPointerDown={stopEvent} onPointerUp={tapSpeak}
                 >
                   {current.title}
                 </div>
@@ -320,23 +368,54 @@ export default function BookReader({ book, onBack }: Props) {
               onClick={stopEvent}
             />
           )}
-          <button className="speak-btn" onClick={(e) => { e.stopPropagation(); handleSpeak(); }} onDoubleClick={(e) => { e.stopPropagation(); setShowVolume((v) => !v); }}>
-            {speaking ? "⏸️" : "🔊"}
+          <button
+            className="speak-btn"
+            onPointerUp={(e) => { e.stopPropagation(); handleSpeak(); }}
+          >
+            {speaking ? "\u23F8\uFE0F" : "\uD83D\uDD0A"}
           </button>
         </div>
       </div>
 
-      <div className="reader-nav">
-        <div className="page-dots">
-          {book.pages.map((_, i) => (
-            <span
-              key={i}
-              className={`dot ${i === page ? "dot-active" : ""}`}
-              onPointerDown={() => setPage(i)}
-            />
-          ))}
-        </div>
+      <div className="reader-nav" onPointerDown={stopEvent}>
+        <button
+          className="nav-btn"
+          onPointerUp={(e) => { e.stopPropagation(); prev(); }}
+          disabled={page === 0}
+        >
+          &#9664;
+        </button>
+        <button
+          className="nav-page-indicator"
+          onPointerUp={(e) => { e.stopPropagation(); setShowPagePicker((v) => !v); }}
+        >
+          {page + 1} / {book.pages.length}
+        </button>
+        <button
+          className="nav-btn"
+          onPointerUp={(e) => { e.stopPropagation(); next(); }}
+          disabled={page === book.pages.length - 1}
+        >
+          &#9654;
+        </button>
       </div>
+
+      {showPagePicker && (
+        <div className="page-picker-overlay" onPointerDown={stopEvent}>
+          <div className="page-picker">
+            {book.pages.map((_, i) => (
+              <button
+                key={i}
+                className={`page-picker-item ${i === page ? "page-picker-active" : ""}`}
+                onPointerUp={(e) => { e.stopPropagation(); setPage(i); setShowPagePicker(false); }}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+          <button className="page-picker-close" onPointerUp={(e) => { e.stopPropagation(); setShowPagePicker(false); }}>Close</button>
+        </div>
+      )}
     </div>
   );
 }
